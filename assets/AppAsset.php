@@ -23,9 +23,12 @@ class AppAsset extends AssetBundle
         'css/site.css',
     ];
     public $js = [
+        'js/yii.confirm.overrides.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
-        'yii\bootstrap5\BootstrapAsset'
+        'yii\bootstrap5\BootstrapAsset',
+        //'app\assets\SweetAlertAsset',
+        'app\assets\BootboxAsset',
     ];
 }
