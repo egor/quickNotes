@@ -22,7 +22,8 @@
         "kartik-v/yii2-widgets": "@dev",
         "kartik-v/yii2-widget-select2": "dev-master",
         "bower-asset/sweetalert": "*",
-        "bower-asset/bootbox": "*"
+        "bower-asset/bootbox": "*",
+        "kartik-v/yii2-date-range": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

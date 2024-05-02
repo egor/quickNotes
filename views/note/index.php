@@ -6,6 +6,8 @@ use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
+
 /** @var yii\web\View $this */
 /** @var app\models\NoteSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -21,12 +23,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a(Yii::t('app', 'Create Note'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php
+    Pjax::begin(['id' => 'note-data']);
+    echo $this->render('_search', ['model' => $searchModel]);
 
-    <?= GridView::widget([
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -36,7 +39,8 @@ $this->params['breadcrumbs'][] = $this->title;
             //'updated_at',
             [
                 'attribute' => 'user_date',
-                'format' => ['datetime', 'php:D, d.m.Y H:i:s']
+                'format' => ['datetime', 'php:D, d.m.Y H:i:s'],
+                'filter' => false,
             ],
             'header',
             //'description:ntext',
@@ -48,8 +52,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
         'pager' => ['class' => \yii\bootstrap5\LinkPager::class],
-    ]); ?>
+    ]);
 
-    <?php Pjax::end(); ?>
+    Pjax::end();
+    ?>
 
 </div>
+<?php

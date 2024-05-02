@@ -20,6 +20,7 @@ class Note extends \yii\db\ActiveRecord
 {
     public $userTag;
     public $oldUserTag = [];
+    public $dateRange;
     /**
      * {@inheritdoc}
      */

@@ -18,7 +18,7 @@ class NoteSearch extends Note
     {
         return [
             [['id', 'user_id', 'created_at', 'updated_at', 'user_date'], 'integer'],
-            [['header', 'description'], 'safe'],
+            [['header', 'description', 'dateRange'], 'safe'],
         ];
     }
 
@@ -54,6 +54,22 @@ class NoteSearch extends Note
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
+        }
+
+        if (!empty($this->dateRange)) {
+
+            $dateTimeRange = explode(' - ', $this->dateRange);
+            if (!empty($dateTimeRange[0]) && !empty($dateTimeRange[1])) {
+
+                $dateTimeRange[0] = strtotime($dateTimeRange[0]);
+                $dateTimeRange[1] = strtotime($dateTimeRange[1]) + 60 * 60 * 24;
+
+                if ($dateTimeRange[0] > 0 && $dateTimeRange[1] > 0 && $dateTimeRange[0] < $dateTimeRange[1]) {
+
+                    $query->andFilterWhere(['>=', 'user_date', $dateTimeRange[0]])
+                        ->andFilterWhere(['<', 'user_date', $dateTimeRange[1]]);
+                }
+            }
         }
 
         // grid filtering conditions

@@ -1,7 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+//use yii\widgets\ActiveForm;
+use kartik\daterange\DateRangePicker;
+use kartik\form\ActiveForm;
+
 
 /** @var yii\web\View $this */
 /** @var app\models\NoteSearch $model */
@@ -14,29 +17,50 @@ use yii\widgets\ActiveForm;
         'action' => ['index'],
         'method' => 'get',
         'options' => [
-            'data-pjax' => 1
+            'data-pjax' => 1,
+            'autocomplete' => 'off'
         ],
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?php
+    //echo $form->field($model, 'id');
 
-    <?= $form->field($model, 'user_id') ?>
+    //echo $form->field($model, 'user_id');
 
-    <?= $form->field($model, 'created_at') ?>
+    //echo $form->field($model, 'created_at');
 
-    <?= $form->field($model, 'updated_at') ?>
+    //echo $form->field($model, 'updated_at');
+    echo $form->field($model, 'dateRange', [
+        'addon' => [
+            'prepend' => [
+                'content' => '<i class="fas fa-calendar-alt"></i>'
+            ]
+        ],
+        'options' => ['class' => 'drp-container mb-2']
+    ])->widget(DateRangePicker::classname(), [
+        'useWithAddon' => true,
+        'pluginOptions'=>[
+            //'locale'=>['format'=>'d.m.Y']
+            'locale'=>['format' => 'DD-MM-YYYY'],
+        ],
+        'pjaxContainerId'=>'note-data',
+    ]);
 
-    <?= $form->field($model, 'user_date') ?>
+    //echo $form->field($model, 'user_date');
 
-    <?php // echo $form->field($model, 'header') ?>
+    echo $form->field($model, 'header');
 
-    <?php // echo $form->field($model, 'description') ?>
+    //echo $form->field($model, 'description');
+    ?>
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-outline-secondary']) ?>
+        <?php
+        echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) . ' ';
+        echo Html::a(Yii::t('app', 'Reset'), ['/note'], ['class' => 'btn btn-outline-secondary']);
+        ?>
     </div>
 
     <?php ActiveForm::end(); ?>
 
 </div>
+<?php
