@@ -58,6 +58,12 @@ class NoteController extends Controller
         $dataProvider->pagination->pageSize = 10;
         $dataProvider->sort->defaultOrder = ['user_date' => SORT_DESC];
 
+        if (!empty($_SESSION['noteDisplay']) && $_SESSION['noteDisplay'] == 'msg') {
+            return $this->render('msg', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -83,6 +89,11 @@ class NoteController extends Controller
                 $model->oldUserTag[$tag['tag_id']] = $tag['tag']['name'];// .= $tag['id'] . ', ';
             }
             $model->userTag = $model->oldUserTag;
+        }
+        if (Yii::$app->request->isAjax) {
+            return $this->renderPartial('view', [
+                'model' => $model,
+            ]);
         }
 
         return $this->render('view', [
@@ -194,5 +205,17 @@ class NoteController extends Controller
             //$out['results'] = ['id' => $id, 'text' => Tag::find($id)->name];
         }
         return $out;
+    }
+
+    public function actionDisplay($as)
+    {
+        switch ($as) {
+            case 'msg':
+                $_SESSION['noteDisplay'] = 'msg';
+                break;
+            default:
+                $_SESSION['noteDisplay'] = 'table';
+        }
+        return $this->redirect(['index']);
     }
 }

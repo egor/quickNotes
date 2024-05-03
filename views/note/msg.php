@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\widgets\ListView;
 use yii\web\View;
 
 /** @var yii\web\View $this */
@@ -22,7 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     echo \app\widgets\navigate\NoteDisplay::widget();
     ?>
-
     <div class="d-flex justify-content-between">
         <div>
             <a class="btn btn-light position-relative" data-bs-toggle="collapse" href="#collapseSearchNote" role="button" aria-expanded="false" aria-controls="collapseSearchNote">
@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </span>
             </a>
             &nbsp;
-            <a href="/note" class="btn btn-light d-none" role="button" aria-expanded="false" id="top-reset-search">
+            <a href="/note/msg" class="btn btn-light d-none" role="button" aria-expanded="false" id="top-reset-search">
                 <i class="fas fa-times"></i> Reset search
             </a>
         </div>
@@ -45,52 +45,44 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     Pjax::begin(['id' => 'note-data']);
     echo $this->render('_search', ['model' => $searchModel]);
-
-    echo GridView::widget([
+    echo ListView::widget([
         'dataProvider' => $dataProvider,
-        //'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            //'id',
-            //'user_id',
-            //'created_at',
-            //'updated_at',
-            [
-                'attribute' => 'user_date',
-                'format' => ['datetime', 'php:D, d.m.Y H:i:s'],
-                'filter' => false,
-            ],
-            [
-                'attribute' => 'header',
-                'format' => 'html',
-                'value' => function ($model) {
-                    $tags = '';
-                    if (!empty($model['tag'])) {
-                        foreach ($model['tag'] as $tag) {
-                            $tags .= ' <a href="/note/index?NoteSearch[userTag][]=' . $tag['name'] . '" class="link-underline-opacity-0"><span class="badge text-bg-secondary">' . $tag['name'] . '</span></a>';
-                        }
-                    }
-                    return $model['header'] . (!empty($tags) ? '<br />' . $tags : '');
-                }
-            ],
-            //'description:ntext',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Note $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                }
-            ],
-        ],
+        'itemView' => '_msgItem',
         'pager' => ['class' => \yii\bootstrap5\LinkPager::class],
     ]);
-
     Pjax::end();
     ?>
 
+    <!-- Modal -->
+    <div class="modal fade" id="editNoteFormModal" tabindex="-1" aria-labelledby="editNoteFormModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Detail</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="editNoteFormModalBody">
+                    ...
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </div>
 <?php
-
 $this->registerJs('
-
-', View::POS_END, 'index-note-js');
+$(".showDetail").on("click", function(){
+    console.log(this.getAttribute("data-id"));
+    id = this.getAttribute("data-id");
+    $.ajax({
+        url: "/note/view?id=" + id,         /* Куда отправить запрос */
+        method: "get",             /* Метод запроса (post или get) */
+        dataType: "html",          /* Тип данных в ответе (xml, json, script, html). */
+        
+        success: function(data){   /* функция которая будет выполнена после успешного запроса.  */
+             $("#editNoteFormModalBody").html(data);
+        }
+    });
+});
+', View::POS_READY, 'msg-note-js');
