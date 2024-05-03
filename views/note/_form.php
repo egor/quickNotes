@@ -58,12 +58,10 @@ use yii\helpers\ArrayHelper;
     echo $form->field($model, 'description')->textarea(['rows' => 6]);
     ?>
 
-    <div class="form-group">
+    <div class="form-group d-grid gap-2 d-md-flex justify-content-md-end">
         <?php
-        echo Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success float-end']);
-
-        echo Html::a(Yii::t('app', 'Cancel'), ['/note'], ['class' => 'btn btn-default float-end']);
-
+        echo Html::a(Yii::t('app', 'Cancel'), ['/note'], ['class' => 'btn btn-default']) . ' ';
+        echo Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']);
         ?>
     </div>
 

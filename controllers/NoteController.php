@@ -75,7 +75,7 @@ class NoteController extends Controller
         $model = $this->findModel($id);
         //@todo to func
         $userTag = NoteTag::find()
-            ->where('note_id = :note_id AND user_id = :user_id', [':note_id' => $id, ':user_id' => Yii::$app->user->id])
+            ->where('note_id = :note_id', [':note_id' => $id])
             ->all();
 
         if (!empty($userTag)) {
