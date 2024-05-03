@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\models\Note;
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
@@ -47,7 +48,7 @@ class NoteSearch extends Note
 
         // add conditions that should always apply here
         $this->load($params);
-
+        $this->user_id = Yii::$app->user->id;
         if (!empty($this->userTag)) {
             $query = Note::find()->joinWith(['tag']);
         } else {
@@ -93,7 +94,7 @@ class NoteSearch extends Note
         // grid filtering conditions
         $query->andFilterWhere([
             //'id' => $this->id,
-            //'user_id' => $this->user_id,
+            'note.user_id' => $this->user_id,
             //'created_at' => $this->created_at,
             //'updated_at' => $this->updated_at,
             'user_date' => $this->user_date,

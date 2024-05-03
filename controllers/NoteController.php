@@ -7,6 +7,7 @@ use app\models\NoteSearch;
 use app\models\NoteTag;
 use app\models\Tag;
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -26,6 +27,15 @@ class NoteController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -65,7 +75,7 @@ class NoteController extends Controller
         $model = $this->findModel($id);
         //@todo to func
         $userTag = NoteTag::find()
-            ->where('note_id = :note_id', [':note_id' => $id])
+            ->where('note_id = :note_id AND user_id = :user_id', [':note_id' => $id, ':user_id' => Yii::$app->user->id])
             ->all();
 
         if (!empty($userTag)) {
@@ -157,7 +167,7 @@ class NoteController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Note::findOne(['id' => $id])) !== null) {
+        if (($model = Note::findOne(['id' => $id, 'user_id' => Yii::$app->user->id])) !== null) {
             return $model;
         }
 
