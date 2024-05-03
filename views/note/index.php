@@ -21,8 +21,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="d-flex justify-content-between">
         <div>
-            <a class="btn btn-light" data-bs-toggle="collapse" href="#collapseSearchNote" role="button" aria-expanded="false" aria-controls="collapseSearchNote">
+            <a class="btn btn-light position-relative" data-bs-toggle="collapse" href="#collapseSearchNote" role="button" aria-expanded="false" aria-controls="collapseSearchNote">
                 <i class="fas fa-search"></i> <span id="collapseSearchNoteText">Show search</span>
+                <span id="collapseSearchNoteBadge" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle d-none">
+                    <span class="visually-hidden">Has search data</span>
+                </span>
+            </a>
+            &nbsp;
+            <a href="/note" class="btn btn-light d-none" role="button" aria-expanded="false" id="top-reset-search">
+                <i class="fas fa-times"></i> Reset search
             </a>
         </div>
         <div>
@@ -57,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $tags = '';
                     if (!empty($model['tag'])) {
                         foreach ($model['tag'] as $tag) {
-                            $tags .= ' <a href="/note/by-tag?tag=' . $tag['name'] . '" class="link-underline-opacity-0"><span class="badge text-bg-secondary">' . $tag['name'] . '</span></a>';
+                            $tags .= ' <a href="http://qn.local/note/index?NoteSearch[userTag][]=' . $tag['name'] . '" class="link-underline-opacity-0"><span class="badge text-bg-secondary">' . $tag['name'] . '</span></a>';
                         }
                     }
                     return $model['header'] . (!empty($tags) ? '<br />' . $tags : '');

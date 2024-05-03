@@ -6,6 +6,7 @@ use kartik\daterange\DateRangePicker;
 use kartik\form\ActiveForm;
 use kartik\select2\Select2;
 use yii\web\JsExpression;
+use yii\web\View;
 
 /** @var yii\web\View $this */
 /** @var app\models\NoteSearch $model */
@@ -13,7 +14,7 @@ use yii\web\JsExpression;
 ?>
 
 
-<div class="collapse show-" id="collapseSearchNote">
+<div class="collapse" id="collapseSearchNote">
     <div class="note-search card card-body">
 
         <?php $form = ActiveForm::begin([
@@ -71,6 +72,7 @@ use yii\web\JsExpression;
                 'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
                 'templateResult' => new JsExpression('function(tag) { return tag.text; }'),
                 'templateSelection' => new JsExpression('function (tag) { return tag.text; }'),
+
             ],
         ]);
         //echo $form->field($model, 'user_date');
@@ -92,13 +94,46 @@ use yii\web\JsExpression;
     <br />
 </div>
 <div class="clearfix"></div>
-<script>
-    const collapseSearchNote = document.getElementById('collapseSearchNote')
-    collapseSearchNote.addEventListener('hidden.bs.collapse', event => {
-        $('#collapseSearchNoteText').html('Show search');
-    });
-    collapseSearchNote.addEventListener('shown.bs.collapse', event => {
-        $('#collapseSearchNoteText').html('Hide search');
-    })
-</script>
 <?php
+$this->registerJs('
+if (localStorage.getItem("collapseSearchNote") == "show") {
+    $("#collapseSearchNote").addClass("show");
+    $("#collapseSearchNoteText").html("Hide search");
+}
+//alert($("#notesearch-usertag").val()); 
+//alert($(".select2-selection__choice").html());
+if (filterHasData() == true && localStorage.getItem("collapseSearchNote") != "show") {
+    $("#top-reset-search").removeClass("d-none");
+    $("#collapseSearchNoteBadge").removeClass("d-none");
+}
+
+collapseSearchNote = document.getElementById("collapseSearchNote");
+collapseSearchNote.addEventListener("hidden.bs.collapse", event => {
+    $("#collapseSearchNoteText").html("Show search");
+    localStorage.setItem("collapseSearchNote", "hide");
+    //$("#top-reset-search").addClass("d-none");
+    if (filterHasData() == true) {
+        $("#top-reset-search").removeClass("d-none");
+        $("#collapseSearchNoteBadge").removeClass("d-none");
+    }
+});
+collapseSearchNote.addEventListener("shown.bs.collapse", event => {
+    $("#collapseSearchNoteText").html("Hide search");
+    localStorage.setItem("collapseSearchNote", "show");
+    $("#top-reset-search").addClass("d-none");
+    $("#collapseSearchNoteBadge").addClass("d-none");
+});
+function filterHasData() {
+    if ($("#notesearch-usertag").val() != undefined && $("#notesearch-usertag").val() != "") {
+        return true;
+    }
+    if ($("#notesearch-header").val() != undefined && $("#notesearch-header").val() != "") {
+        return true;
+    }
+    if ($("#notesearch-daterange").val() != undefined && $("#notesearch-daterange").val() != "") {
+        return true;
+    }
+    return false;
+}
+
+', View::POS_END, 'search-note-js');
