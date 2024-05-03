@@ -1,7 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+//use yii\widgets\ActiveForm;
+use yii\bootstrap5\ActiveForm;
 use kartik\datecontrol\DateControl;
 use kartik\select2\Select2;
 use yii\web\JsExpression;

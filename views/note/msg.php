@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </span>
             </a>
             &nbsp;
-            <a href="/note/msg" class="btn btn-light d-none" role="button" aria-expanded="false" id="top-reset-search">
+            <a href="/note/index" class="btn btn-light d-none" role="button" aria-expanded="false" id="top-reset-search">
                 <i class="fas fa-times"></i> Reset search
             </a>
         </div>
