@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $tags = '';
                     if (!empty($model['tag'])) {
                         foreach ($model['tag'] as $tag) {
-                            $tags .= ' <a href="http://qn.local/note/index?NoteSearch[userTag][]=' . $tag['name'] . '" class="link-underline-opacity-0"><span class="badge text-bg-secondary">' . $tag['name'] . '</span></a>';
+                            $tags .= ' <a href="/note/index?NoteSearch[userTag][]=' . $tag['name'] . '" class="link-underline-opacity-0"><span class="badge text-bg-secondary">' . $tag['name'] . '</span></a>';
                         }
                     }
                     return $model['header'] . (!empty($tags) ? '<br />' . $tags : '');

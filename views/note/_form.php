@@ -6,6 +6,7 @@ use kartik\datecontrol\DateControl;
 use kartik\select2\Select2;
 use yii\web\JsExpression;
 use yii\helpers\ArrayHelper;
+use yii\web\View;
 
 /** @var yii\web\View $this */
 /** @var app\models\Note $model */
@@ -23,12 +24,17 @@ use yii\helpers\ArrayHelper;
 
     echo $form->field($model, 'user_date')->widget(DateControl::classname(), [
         'value' => $model->user_date,
-        'type'=>DateControl::FORMAT_DATETIME,
+        'type' => DateControl::FORMAT_DATETIME,
         'displayTimezone' => 'Europe/Kiev',
         'displayFormat' => 'php:D, d.m.Y H:i:s',
         'saveFormat' => 'php:U',
+        'widgetOptions' => [
+            'removeButton' => false
+        ]
+        //'pluginOptions' => ['allowClear' => false],
     ]);
-    echo $form->field($model, 'header')->textInput(['maxlength' => true, 'autofocus' => true]);
+
+    echo $form->field($model, 'header')->textInput(['maxlength' => true, 'inputmode' => 'text', 'autofocus' => true]);
     //echo $form->field($model, 'userTag')->textInput(['maxlength' => true]);
     $url = \yii\helpers\Url::to(['tag-list']);
     echo $form->field($model, 'userTag')->widget(Select2::classname(), [
@@ -68,3 +74,9 @@ use yii\helpers\ArrayHelper;
     <?php ActiveForm::end(); ?>
 
 </div>
+<?php
+$this->registerJs('
+$("#note-user_date-disp").on("focus",function(){
+    $(this).trigger("blur");
+});
+', View::POS_READY, 'form-note-js');

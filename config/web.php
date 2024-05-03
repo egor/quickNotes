@@ -5,6 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'name' => 'Quick Notes',
     'timeZone' => 'Europe/Kiev',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],

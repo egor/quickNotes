@@ -135,5 +135,7 @@ function filterHasData() {
     }
     return false;
 }
-
+$("#notesearch-daterange").on("focus",function(){
+    $(this).trigger("blur");
+});
 ', View::POS_END, 'search-note-js');
