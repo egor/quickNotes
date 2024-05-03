@@ -8,6 +8,8 @@ RewriteRule ^assets/(.*)$ /web/assets/$1 [L]
 RewriteRule ^css/(.*)$ web/css/$1 [L]
 RewriteRule ^js/(.*)$ web/js/$1 [L]
 RewriteRule ^images/(.*)$ web/images/$1 [L]
+RewriteRule ^favicon/(.*)$ web/favicon/$1 [L]
+RewriteRule ^favicon.ico$ web/favicon.ico [L]
 RewriteRule (.*) /web/$1
  
 RewriteCond %{REQUEST_FILENAME} !-f
