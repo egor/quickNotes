@@ -2,9 +2,10 @@
 
 namespace app\models;
 
+use app\models\Note;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Note;
+
 
 /**
  * NoteSearch represents the model behind the search form of `app\models\Note`.
@@ -18,7 +19,7 @@ class NoteSearch extends Note
     {
         return [
             [['id', 'user_id', 'created_at', 'updated_at', 'user_date'], 'integer'],
-            [['header', 'description', 'dateRange'], 'safe'],
+            [['header', 'description', 'dateRange', 'userTag'], 'safe'],
         ];
     }
 
@@ -40,15 +41,21 @@ class NoteSearch extends Note
      */
     public function search($params)
     {
-        $query = Note::find();
+        //$query = Note::find()->joinWith(['tag']);
+
+
 
         // add conditions that should always apply here
+        $this->load($params);
 
+        if (!empty($this->userTag)) {
+            $query = Note::find()->joinWith(['tag']);
+        } else {
+            $query = Note::find();
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
-        $this->load($params);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -72,12 +79,23 @@ class NoteSearch extends Note
             }
         }
 
+        if (!empty($this->userTag)) {
+
+            //$query->andFilterWhere(['like', 'tag.name1', implode(' OR ', $this->userTag)]);
+            $like = [];
+            foreach ($this->userTag as $tag) {
+                //$like[] = '"%' . $tag . '%"';
+                $like[] = '"' . $tag . '"';
+            }
+            $query->andWhere('(`tag`.`name` LIKE ' . implode(' OR ', $like) . ')');
+        }
+
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'user_id' => $this->user_id,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            //'id' => $this->id,
+            //'user_id' => $this->user_id,
+            //'created_at' => $this->created_at,
+            //'updated_at' => $this->updated_at,
             'user_date' => $this->user_date,
         ]);
 

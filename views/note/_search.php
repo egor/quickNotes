@@ -4,7 +4,8 @@ use yii\helpers\Html;
 //use yii\widgets\ActiveForm;
 use kartik\daterange\DateRangePicker;
 use kartik\form\ActiveForm;
-
+use kartik\select2\Select2;
+use yii\web\JsExpression;
 
 /** @var yii\web\View $this */
 /** @var app\models\NoteSearch $model */
@@ -46,6 +47,30 @@ use kartik\form\ActiveForm;
         'pjaxContainerId'=>'note-data',
     ]);
 
+    $url = \yii\helpers\Url::to(['tag-list']);
+    echo $form->field($model, 'userTag')->widget(Select2::classname(), [
+        //'data' => $tags,
+        'options' => ['placeholder' => 'Select a state ...'],
+        'pluginOptions' => [
+            'allowClear' => true,
+            'multiple' => true,
+            'tags' => true,
+            'tokenSeparators' => [', ', ' '],
+
+            'minimumInputLength' => 1,
+            'language' => [
+                'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+            ],
+            'ajax' => [
+                'url' => $url,
+                'dataType' => 'json',
+                'data' => new JsExpression('function(params) { return {q:params.term}; }')
+            ],
+            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+            'templateResult' => new JsExpression('function(tag) { return tag.text; }'),
+            'templateSelection' => new JsExpression('function (tag) { return tag.text; }'),
+        ],
+    ]);
     //echo $form->field($model, 'user_date');
 
     echo $form->field($model, 'header');

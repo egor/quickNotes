@@ -127,4 +127,16 @@ class Note extends \yii\db\ActiveRecord
         }
 
     }
+
+    public function getTag()
+    {
+        /*
+        return $this
+            ->hasMany(NoteTag::className(), ['id' => 'id'])
+            ->viaTable('tag', ['note_id' => 'id']);
+        */
+        return $this
+            ->hasMany(Tag::className(), ['id' => 'tag_id'])
+            ->viaTable('note_tag', ['note_id' => 'id']);
+    }
 }
